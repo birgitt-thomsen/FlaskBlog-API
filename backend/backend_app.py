@@ -11,10 +11,14 @@ POSTS = [
 
 
 def validate_post_data(data):
-    """ Returns True if post data is valid, False otherwise. """
-    if "title" not in data or "content" not in data:
-        return False
-    return True
+    """ Takes the POST data and returns missing fields. """
+    required_fields = ["title", "content"]
+
+    missing_fields = [
+        field for field in required_fields
+        if field not in data or not data[field]
+    ]
+    return missing_fields
 
 
 @app.route('/api/posts', methods=['GET'])
@@ -29,8 +33,13 @@ def add_post():
     post data is incomplete. """
     data = request.get_json()
 
-    if not validate_post_data(data):
-        return jsonify({"error": "Invalid post data"}), 400
+    missing_fields = validate_post_data(data)
+
+    if missing_fields:
+        return jsonify({
+            "error": f"Missing required fields: "
+                     f"{", ".join(missing_fields)}"
+        }), 400
 
     next_id = max(post["id"] for post in POSTS) + 1 if POSTS else 1
 
