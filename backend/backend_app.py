@@ -66,22 +66,55 @@ def add_post():
 @app.route('/api/posts/<int:post_id>', methods=['DELETE'])
 def delete_post(post_id):
     """
-    Deletes the user selected post from the database and returns
+    Deletes the selected post from the database and returns
     success message. Returns error message when post id does not exist.
     """
-    # Find the book with the given ID
+    # Find the post with the given ID
     post = find_post_by_id(post_id)
 
-    # If the book wasn't found, return a 404 error
+    # If post not found, return a 404 error
     if post is None:
-        return jsonify({"error": f"Post with id '{post_id}' not found"}), 404
+        return jsonify({"error": f"Post with id '{post_id}' not found."}), 404
 
     # Remove the post from the list
     POSTS.remove(post)
 
     # Return success message
     return (jsonify({"message": f"Post with id '{post_id}' has been "
-                                "successfully deleted."}),200)
+                                "deleted successfully."}),200)
+
+
+@app.route('/api/posts/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    """
+    Updates a post and returns success message. Returns error message when
+    post cannot be found or no update data was provided.
+    """
+    # Find the post with the given ID
+    post = find_post_by_id(post_id)
+
+    # If post not found, return a 404 error
+    if post is None:
+        return jsonify({"error": f"Post with id '{post_id}' not found."}), 404
+
+    data = request.get_json()
+
+    # Check if data was submitted
+    if not data:
+        return jsonify({
+            "error": "No update data provided"
+        }), 400
+
+    # Update post fields
+    if "title" in data:
+        post["title"] = data["title"]
+
+    if "content" in data:
+        post["content"] = data["content"]
+
+    # Return success message
+    return (jsonify({"message": f"Post with id '{post_id}' has been "
+                                "updated successfully."}), 200)
 
 
 if __name__ == '__main__':
