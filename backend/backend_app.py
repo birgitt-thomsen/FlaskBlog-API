@@ -95,7 +95,7 @@ def get_posts():
         if sort_field == "date":
             results = sorted(
                 results,
-                key=lambda post: datetime.strptime(post["date"], "%d/%m/%Y"),
+                key=lambda post: datetime.strptime(post["date"], "%Y-%m-%d"),
                 reverse=(direction.lower() == "desc")
             )
         else:
