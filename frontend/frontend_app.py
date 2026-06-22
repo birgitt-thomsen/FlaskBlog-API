@@ -1,3 +1,5 @@
+"""Flask frontend application for rendering the blog homepage."""
+
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -5,6 +7,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def home():
+    """Renders the index.html template"""
     return render_template("index.html")
 
 
