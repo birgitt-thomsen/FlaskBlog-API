@@ -1,5 +1,6 @@
 """ Module handles backend flask routing to navigate the blog application. """
 
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -20,14 +21,16 @@ swagger_ui_blueprint = get_swaggerui_blueprint(
 app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 POSTS = [
-    {"id": 1, "title": "First post", "content": "This is the first post."},
-    {"id": 2, "title": "Second post", "content": "This is the second post."},
+    {"id": 1, "title": "First post", "content": "This is the first post.",
+     "author": "B. Bloggerton",  "date": "2026-06-22"},
+    {"id": 2, "title": "Second post", "content": "This is the second post.",
+     "author": "B. Bloggerton",  "date": "2026-06-22"},
 ]
 
 
 def validate_post_data(data):
     """ Takes the POST input data and returns any missing fields. """
-    required_fields = ["title", "content"]
+    required_fields = ["title", "content", "author"]
 
     missing_fields = [
         field for field in required_fields
@@ -62,16 +65,23 @@ def get_posts():
     results = POSTS.copy()
 
     if sort_field:
-        if sort_field not in ["title", "content"]:
+        if sort_field not in ["title", "content", "author", "date"]:
             return jsonify({
-                "error": "sort field must be 'title' or 'content'."
+                "error": "sort field must be 'title', 'content', 'author' or 'date'."
             }), 400
 
-        results = sorted(
-            results,
-            key=lambda post: post[sort_field].lower(),
-            reverse=(direction.lower() == "desc")
-        )
+        if sort_field == "date":
+            results = sorted(
+                results,
+                key=lambda post: datetime.strptime(post["date"], "%d/%m/%Y"),
+                reverse=(direction.lower() == "desc")
+            )
+        else:
+            results = sorted(
+                results,
+                key=lambda post: post[sort_field].lower(),
+                reverse=(direction.lower() == "desc")
+            )
 
     return jsonify(results), 200
 
@@ -97,7 +107,9 @@ def add_post():
     new_post = {
         "id": next_id,
         "title": data["title"],
-        "content": data["content"]
+        "content": data["content"],
+        "author": data["author"],
+        "date": datetime.now().strftime("%Y-%m-%d")
     }
 
     POSTS.append(new_post)
@@ -154,6 +166,9 @@ def update_post(post_id):
     if "content" in data:
         post["content"] = data["content"]
 
+    if "author" in data:
+        post["author"] = data["author"]
+
     # Return success message
     return (jsonify({"message": f"Post with id '{post_id}' has been "
                                 "updated successfully."}), 200)
@@ -167,6 +182,8 @@ def search_posts():
     """
     title = request.args.get("title")
     content = request.args.get("content")
+    author = request.args.get("author")
+    date = request.args.get("date")
 
     results = POSTS
 
@@ -181,6 +198,25 @@ def search_posts():
             post for post in results
             if content.lower() in post["content"].lower()
         ]
+
+    if author:
+        results = [
+            post for post in results
+            if author.lower() in post["author"].lower()
+        ]
+
+    if date:
+        try:
+            search_date = datetime.strptime(date, "%Y-%m-%d").date()
+            results = [
+                post for post in results
+                if datetime.strptime(post["date"],
+                                     "%Y-%m-%d").date() == search_date
+            ]
+        except ValueError:
+            return jsonify({
+                "error": "Invalid date format. Use YYYY-MM-DD"
+            }), 400
 
     return jsonify(results), 200
 
