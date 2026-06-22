@@ -1,3 +1,5 @@
+""" Module handles backend flask routing to navigate the blog application. """
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
@@ -11,7 +13,7 @@ POSTS = [
 
 
 def validate_post_data(data):
-    """ Takes the POST data and returns missing fields. """
+    """ Takes the POST input data and returns any missing fields. """
     required_fields = ["title", "content"]
 
     missing_fields = [
@@ -22,8 +24,10 @@ def validate_post_data(data):
 
 
 def find_post_by_id(post_id):
-    """ Find the post with the id `post_id`. If there is no post with this
-    id, return None."""
+    """
+    Finds the post with the id `post_id`. If there is no post with this
+    id, return None.
+    """
     for post in POSTS:
         if post["id"] == post_id:
             return post
@@ -32,14 +36,39 @@ def find_post_by_id(post_id):
 
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
-    """ Returns a list of all posts. """
-    return jsonify(POSTS)
+    """
+    Returns a list of all posts and allows user to sort by either title
+    or content. Ascending order is default unless user specifies descending
+    order. Returns an error message when sort field is invalid.
+    """
+
+    # return jsonify(POSTS)
+    sort_field = request.args.get("sort")
+    direction = request.args.get("direction", "asc")
+
+    results = POSTS.copy()
+
+    if sort_field:
+        if sort_field not in ["title", "content"]:
+            return jsonify({
+                "error": "sort field must be 'title' or 'content'."
+            }), 400
+
+        results = sorted(
+            results,
+            key=lambda post: post[sort_field].lower(),
+            reverse=(direction.lower() == "desc")
+        )
+
+    return jsonify(results), 200
 
 
 @app.route('/api/posts', methods=['POST'])
 def add_post():
-    """ Adds a new post to the database, returns an error message if the
-    post data is incomplete. """
+    """
+    Adds a new post to the database, returns an error message if the
+    post data is incomplete.
+    """
     data = request.get_json()
 
     missing_fields = validate_post_data(data)
@@ -66,7 +95,7 @@ def add_post():
 @app.route('/api/posts/<int:post_id>', methods=['DELETE'])
 def delete_post(post_id):
     """
-    Deletes the selected post from the database and returns
+    Deletes the selected post from the database and returns a
     success message. Returns error message when post id does not exist.
     """
     # Find the post with the given ID
@@ -119,6 +148,10 @@ def update_post(post_id):
 
 @app.route('/api/posts/search', methods=['GET'])
 def search_posts():
+    """
+    Returns a list of all posts with title or content that matches the
+    user's search input. Returns an empty list when no matches are found.
+    """
     title = request.args.get("title")
     content = request.args.get("content")
 
