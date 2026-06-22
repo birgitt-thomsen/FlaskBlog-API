@@ -1,9 +1,11 @@
 """ Module handles backend flask routing to navigate the blog application. """
 
+import json
 from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
+
 
 app = Flask(__name__)
 CORS(app)  # This will enable CORS for all routes
@@ -20,12 +22,31 @@ swagger_ui_blueprint = get_swaggerui_blueprint(
 )
 app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
-POSTS = [
-    {"id": 1, "title": "First post", "content": "This is the first post.",
-     "author": "B. Bloggerton",  "date": "2026-06-22"},
-    {"id": 2, "title": "Second post", "content": "This is the second post.",
-     "author": "B. Bloggerton",  "date": "2026-06-22"},
-]
+DATA_FILE = 'data/data.json'
+
+def load_posts():
+    """
+    Loads the json data file. Saves an empty file when no json file exists
+    or the existing file is invalid. If invalid, it prints an error message.
+    """
+    try:
+        with open(DATA_FILE, encoding='utf-8') as file:
+            return json.load(file)
+
+    except FileNotFoundError:
+        save_posts([])
+        return []
+
+    except json.JSONDecodeError:
+        print(f"WARNING: '{DATA_FILE}' is invalid, recreating empty database.")
+        save_posts([])
+        return []
+
+
+def save_posts(posts):
+    """ Saves posts to the json file. """
+    with open(DATA_FILE, "w", encoding='utf-8') as file:
+        json.dump(posts, file, indent=4)
 
 
 def validate_post_data(data):
@@ -39,12 +60,12 @@ def validate_post_data(data):
     return missing_fields
 
 
-def find_post_by_id(post_id):
+def find_post_by_id(posts, post_id):
     """
     Finds the post with the id `post_id`. If there is no post with this
     id, return None.
     """
-    for post in POSTS:
+    for post in posts:
         if post["id"] == post_id:
             return post
     return None
@@ -57,12 +78,13 @@ def get_posts():
     or content. Ascending order is default unless user specifies descending
     order. Returns an error message when sort field is invalid.
     """
+    posts = load_posts()
 
     # return jsonify(POSTS)
     sort_field = request.args.get("sort")
     direction = request.args.get("direction", "asc")
 
-    results = POSTS.copy()
+    results = posts.copy()
 
     if sort_field:
         if sort_field not in ["title", "content", "author", "date"]:
@@ -92,6 +114,7 @@ def add_post():
     Adds a new post to the database, returns an error message if the
     post data is incomplete.
     """
+    posts = load_posts()
     data = request.get_json()
 
     missing_fields = validate_post_data(data)
@@ -102,7 +125,7 @@ def add_post():
                      f"{", ".join(missing_fields)}"
         }), 400
 
-    next_id = max(post["id"] for post in POSTS) + 1 if POSTS else 1
+    next_id = max(post["id"] for post in posts) + 1 if posts else 1
 
     new_post = {
         "id": next_id,
@@ -112,7 +135,9 @@ def add_post():
         "date": datetime.now().strftime("%Y-%m-%d")
     }
 
-    POSTS.append(new_post)
+    # Add new post to the list and save
+    posts.append(new_post)
+    save_posts(posts)
 
     return jsonify(new_post), 201
 
@@ -123,15 +148,18 @@ def delete_post(post_id):
     Deletes the selected post from the database and returns a
     success message. Returns error message when post id does not exist.
     """
+    posts = load_posts()
+
     # Find the post with the given ID
-    post = find_post_by_id(post_id)
+    post = find_post_by_id(posts, post_id)
 
     # If post not found, return a 404 error
     if post is None:
         return jsonify({"error": f"Post with id '{post_id}' not found."}), 404
 
-    # Remove the post from the list
-    POSTS.remove(post)
+    # Remove the post from the list and save
+    posts.remove(post)
+    save_posts(posts)
 
     # Return success message
     return (jsonify({"message": f"Post with id '{post_id}' has been "
@@ -144,8 +172,10 @@ def update_post(post_id):
     Updates a post and returns success message. Returns error message when
     post cannot be found or no update data was provided.
     """
+    posts = load_posts()
+
     # Find the post with the given ID
-    post = find_post_by_id(post_id)
+    post = find_post_by_id(posts, post_id)
 
     # If post not found, return a 404 error
     if post is None:
@@ -155,9 +185,7 @@ def update_post(post_id):
 
     # Check if data was submitted
     if not data:
-        return jsonify({
-            "error": "No update data provided"
-        }), 400
+        return jsonify({"error": "No update data provided"}), 400
 
     # Update post fields
     if "title" in data:
@@ -168,6 +196,8 @@ def update_post(post_id):
 
     if "author" in data:
         post["author"] = data["author"]
+
+    save_posts(posts)
 
     # Return success message
     return (jsonify({"message": f"Post with id '{post_id}' has been "
@@ -180,12 +210,14 @@ def search_posts():
     Returns a list of all posts with title or content that matches the
     user's search input. Returns an empty list when no matches are found.
     """
+    posts = load_posts()
+
     title = request.args.get("title")
     content = request.args.get("content")
     author = request.args.get("author")
     date = request.args.get("date")
 
-    results = POSTS
+    results = posts
 
     if title:
         results = [

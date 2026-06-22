@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "title": "Why My Coffee Deserves a Promotion",
+        "content": "Today I discovered that my productivity is directly proportional to the quality of my coffee. After upgrading from instant coffee to a freshly brewed cup, I completed three tasks, answered five emails, and only got distracted by cat videos twice. At this rate, I expect my coffee machine to be asking for a corner office by the end of the week. Until then, I'll continue my highly scientific research one cup at a time.",
+        "author": "Ada Byte",
+        "date": "2026-06-02"
+    },
+    {
+        "id": 2,
+        "title": "The Day My Space Bar Took a Vacation",
+        "content": "Disaster struck this morning when my space bar stopped responding. For nearly ten minutes, all my sentences looked like secret passwords. After a brief investigation involving compressed air, questionable tapping techniques, and a stern lecture, the space bar returned to duty. Productivity has resumed, and words once again have room to breathe.",
+        "author": "Captain Keyboard",
+        "date": "2026-06-03"
+    },
+    {
+        "id": 3,
+        "title": "The Great Refactoring Adventure",
+        "content": "What began as a simple plan to clean up a few lines of code quickly evolved into an epic journey through functions, variables, and forgotten comments. At first, everything seemed straightforward. I renamed a few variables, extracted a helper function, and admired my handiwork.\r\n\r\nThen I noticed another section that could be improved. And another. Before long, I had convinced myself that the entire application needed a complete overhaul.\r\n\r\nHours passed. Functions moved. Files were reorganized. Temporary notes became permanent architecture decisions. I even created a diagram to explain what I was doing, only to realize halfway through that the diagram no longer matched the code.\r\n\r\nAt one point I accidentally fixed a bug I didn't know existed. This felt like a major victory until I immediately introduced a different bug in a completely unrelated feature. Such is the balance of the universe.\r\n\r\nAs the evening approached, I finally reached the end of the refactor. The application looked cleaner, the code was easier to read, and future me would probably be grateful. Present me, however, was exhausted and running entirely on snacks and optimism.\r\n\r\nThe greatest lesson from this adventure was that every programmer begins a refactor believing it will take fifteen minutes. Every programmer ends the refactor wondering where the entire afternoon went.\r\n\r\nStill, there are few feelings more satisfying than opening a file full of tangled code and leaving it just a little better than you found it.",
+        "author": "Sir Loops-a-lot",
+        "date": "2026-06-05"
+    },
+    {
+        "id": 4,
+        "title": "Breaking: Local Sock Still Missing Partner",
+        "content": "Investigations continue in the dryer dimension.",
+        "author": "Detective Dryer",
+        "date": "2026-06-09"
+    },
+    {
+        "id": 5,
+        "title": "The Medium Tale of a Keyboard That Refused to Cooperate",
+        "content": "It started with a single sticky key. Then another. Soon, typing became an interpretive art form. Every sentence required negotiation with the 'E' key, which insisted on appearing only when it felt emotionally ready. I considered replacing the keyboard, but by then I had grown oddly attached to its rebellious personality.",
+        "author": "Professor Qwerty",
+        "date": "2026-06-12"
+    },
+    {
+        "id": 6,
+        "title": "The Grand Saga of the Misplaced USB Drive",
+        "content": "It began as a simple day. I needed a USB drive. I knew I had one somewhere\u2014possibly in a drawer, or a bag, or emotionally attached to another timeline. What followed was a full archaeological expedition across my desk, my backpack, and the mysterious void behind the monitor. I uncovered relics: old receipts, a pen that stopped working in 2019, and three cables that belong to nothing known to science. The USB drive, however, remained elusive. Eventually, I found it inside a shoe. I do not remember placing it there, and I have stopped asking questions about my past self's intentions.",
+        "author": "Archivist Loop",
+        "date": "2026-06-12"
+    }
+]
