@@ -3,7 +3,7 @@
         "id": 1,
         "title": "Why My Coffee Deserves a Promotion",
         "content": "Today I discovered that my productivity is directly proportional to the quality of my coffee. After upgrading from instant coffee to a freshly brewed cup, I completed three tasks, answered five emails, and only got distracted by cat videos twice. At this rate, I expect my coffee machine to be asking for a corner office by the end of the week. Until then, I'll continue my highly scientific research one cup at a time.",
-        "author": "Ada Byte",
+        "author": "Ada Bytes",
         "date": "2026-06-02"
     },
     {
@@ -21,13 +21,6 @@
         "date": "2026-06-05"
     },
     {
-        "id": 4,
-        "title": "Breaking: Local Sock Still Missing Partner",
-        "content": "Investigations continue in the dryer dimension.",
-        "author": "Detective Dryer",
-        "date": "2026-06-09"
-    },
-    {
         "id": 5,
         "title": "The Medium Tale of a Keyboard That Refused to Cooperate",
         "content": "It started with a single sticky key. Then another. Soon, typing became an interpretive art form. Every sentence required negotiation with the 'E' key, which insisted on appearing only when it felt emotionally ready. I considered replacing the keyboard, but by then I had grown oddly attached to its rebellious personality.",
@@ -40,5 +33,12 @@
         "content": "It began as a simple day. I needed a USB drive. I knew I had one somewhere\u2014possibly in a drawer, or a bag, or emotionally attached to another timeline. What followed was a full archaeological expedition across my desk, my backpack, and the mysterious void behind the monitor. I uncovered relics: old receipts, a pen that stopped working in 2019, and three cables that belong to nothing known to science. The USB drive, however, remained elusive. Eventually, I found it inside a shoe. I do not remember placing it there, and I have stopped asking questions about my past self's intentions.",
         "author": "Archivist Loop",
         "date": "2026-06-12"
+    },
+    {
+        "id": 7,
+        "title": "I Really Tried to Teach My Cat Python",
+        "content": "The cat now loops around my keyboard but refuses recursion.",
+        "author": "Whisker Syntax",
+        "date": "2026-06-23"
     }
 ]
