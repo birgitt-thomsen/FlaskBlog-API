@@ -15,9 +15,39 @@
             <button onclick="loadPosts()">Load Posts</button>
         </div>
         <div class="input-field">
+            <input type="text" id="search-value" placeholder="Enter search text">
+
+            <select id="search-field">
+                <option value="title">Title</option>
+                <option value="content">Content</option>
+                <option value="author">Author</option>
+                <option value="date">Date</option>
+            </select>
+
+            <button onclick="searchPosts()">Search</button>
+            <button onclick="loadPosts()">Show All</button>
+        </div>
+        <div class="input-field">
+            <input type="text" id="post-author" placeholder="Enter Author Name">
             <input type="text" id="post-title" placeholder="Enter Post Title">
             <input type="text" id="post-content" placeholder="Enter Post Content">
-            <button onclick="addPost()">Add Post</button>
+            <button id="submit-button" onclick="addPost()">Add Post</button>
+            <button id="cancel-button" onclick="cancelEdit()" style="display:none;">
+                Cancel
+            </button>
+        </div>
+        <div class="input-field">
+            <select id="sort-field" onchange="sortPosts()">
+                <option value="title">Title</option>
+                <option value="content">Content</option>
+                <option value="author">Author</option>
+                <option value="date">Date</option>
+            </select>
+
+            <select id="sort-direction" onchange="sortPosts()">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
         </div>
         <div id="post-container">
             <!-- Blog posts will be inserted here by JavaScript -->
