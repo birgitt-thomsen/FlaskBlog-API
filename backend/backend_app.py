@@ -1,6 +1,7 @@
 """ Module handles backend flask routing to navigate the blog application. """
 
 import json
+import os
 from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -22,7 +23,8 @@ swagger_ui_blueprint = get_swaggerui_blueprint(
 )
 app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
-DATA_FILE = 'data/data.json'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, 'data', 'data.json')
 
 def load_posts():
     """
@@ -122,7 +124,7 @@ def add_post():
     if missing_fields:
         return jsonify({
             "error": f"Missing required fields: "
-                     f"{", ".join(missing_fields)}"
+                     f"{', '.join(missing_fields)}"
         }), 400
 
     next_id = max(post["id"] for post in posts) + 1 if posts else 1
