@@ -49,7 +49,7 @@ function loadPosts() {
         .catch(error => console.error('Error:', error));
 }
 
-// Search posts by title, content, author or date
+// Function to allow user to search posts by title, content, author or date
 function searchPosts() {
     var baseUrl = document.getElementById('api-base-url').value;
     var searchValue = document.getElementById('search-value').value.trim();
@@ -72,7 +72,8 @@ function searchPosts() {
     .catch(error => console.error('Error:', error));
 }
 
-// Function to send a POST request to the API to add a new post
+/* Function to send a POST request to the API to add a new post or update
+an existing post */
 function addPost() {
 
     var baseUrl = document.getElementById('api-base-url').value;
@@ -126,7 +127,7 @@ function addPost() {
     }
 }
 
-// Function to allow sorting the posts
+// Function to allow user to sort the posts
 function sortPosts() {
     var baseUrl = document.getElementById('api-base-url').value;
     var sortField = document.getElementById('sort-field').value;
@@ -162,6 +163,7 @@ function deletePost(postId) {
     .catch(error => console.error('Error:', error));
 }
 
+// Function allows user to edit a post using the add post fields
 function editPost(postId) {
 
     const post = currentPosts.find(post => post.id === postId);
@@ -180,6 +182,7 @@ function editPost(postId) {
     document.getElementById('cancel-button').style.display = "inline";
 }
 
+// Function that allows user to cancel an edit action
 function cancelEdit() {
 
     editingPostId = null;
